@@ -22,12 +22,14 @@ class Client(object):
         
         while not received:
             message = sockToServer.recv(10240)
+            print "received message: %s" % message
             if message:
                 received = True
                 if message.startswith(":"):
                     data = message[1:].split(",")
                     clientIP = data[0]
                     clientPort = data[1]
+                    print "client: %s:%s" % (clientIP, clientPort)
         
         sockToServer.sendto("hello client", (clientIP, clientPort))     
         
