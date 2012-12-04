@@ -8,6 +8,7 @@ import base64
 import os
 import threading
 import time
+import pickle
 
 
 class _PunchingServer(UDPServer):
@@ -26,17 +27,23 @@ class Server(BaseRequestHandler):
     def handle(self):        
         print "message: %s from %s " %  (self.request[0], self.client_address)
         socket = self.request[1]
-        self.addRemotes(socket)
-        print socket
-        socket.sendto("Thank you", self.client_address)
+        backval = self.addRemotes(self.client_address)
+        if backval:
+            socket.sendto(backval, self.client_address)
     
-    def addRemotes(self, socket):
+    def addRemotes(self, address):
+        
+        self._remotesPool.append(address)
+        
         if len(self._remotesPool) < 2:
-            print "having less than 2 connections"
-            self._remotesPool.append(socket)
-        else:
-            print "having two Clients"
-            print self._remotesPool
+            print "having still less than 2 connections"
+            return None
+        
+        print "having two Clients"
+        #self._remotesPool = []
+        #print self._remotesPool
+        return ":%s,%i" % (self._remotesPool[0][0], self._remotesPool[0][1])
+        #print self._remotesPool
             
     @staticmethod
     def startServer(ip = "", port = 5555):
