@@ -19,7 +19,7 @@ class Server(BaseRequestHandler):
     classdocs
     '''
     
-    _remotesPool = []
+    _remotesPool = {}
 
     def setup(self):
         pass
@@ -31,9 +31,13 @@ class Server(BaseRequestHandler):
         if backval:
             socket.sendto(backval, self.client_address)
     
-    def addRemotes(self, address):
+    def addRemotes(self, identifier, address):
+        if not identifier in self._remotesPool:
+            self._remotesPool[identifier] = []
+            
+        self._remotesPool[identifier].append(address)
         
-        self._remotesPool.append(address)
+        print self._remotesPool
         
         if len(self._remotesPool) < 2:
             print "having still less than 2 connections"
@@ -42,7 +46,7 @@ class Server(BaseRequestHandler):
         print "having two Clients"
         #self._remotesPool = []
         #print self._remotesPool
-        return ":%s,%i" % (self._remotesPool[0][0], self._remotesPool[0][1])
+        return ":%s,%i" % (self._remotesPool[identifier][0][0], self._remotesPool[identifier][0][1])
         #print self._remotesPool
             
     @staticmethod
