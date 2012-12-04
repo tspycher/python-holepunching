@@ -20,14 +20,16 @@ class Client(object):
         
         received = False
         
-        """while not received:
+        while not received:
             message = sockToServer.recv(10240)
             if message:
                 received = True
+                if message.startswith(":"):
+                    data = message[1:].split(",")
+                    clientIP = data[0]
+                    clientPort = data[1]
         
-        sockToServer = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-        sockToServer.sendto("hello", (self.serverIP, self.serverPort))
-           """     
+        sockToServer.sendto("hello client", (clientIP, clientPort))     
         
 if __name__ == "__main__":
     client = Client("10.84.1.116", 5555)
