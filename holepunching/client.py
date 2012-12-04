@@ -16,7 +16,7 @@ class Client(object):
         
     def start(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-        sock.sendto("hello", (self.serverIP, self.serverPort))
+        sock.sendto("blubb", (self.serverIP, self.serverPort))
         
         received = False
         
@@ -30,8 +30,7 @@ class Client(object):
                     clientIP = data[0]
                     clientPort = data[1]
                     print "client: %s:%s" % (clientIP, clientPort)
-        
-        sock.sendto("hello client", (clientIP, int(clientPort)))     
+                    sock.sendto("hello client", (clientIP, int(clientPort)))     
         
 if __name__ == "__main__":
     client = Client("10.84.1.116", 5555)
