@@ -15,13 +15,13 @@ class Client(object):
         self.serverPort = serverPort
         
     def start(self):
-        sockToServer = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-        sockToServer.sendto("hello", (self.serverIP, self.serverPort))
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        sock.sendto("hello", (self.serverIP, self.serverPort))
         
         received = False
         
         while not received:
-            message = sockToServer.recv(10240)
+            message = sock.recv(10240)
             print "received message: %s" % message
             if message:
                 received = True
@@ -31,7 +31,7 @@ class Client(object):
                     clientPort = data[1]
                     print "client: %s:%s" % (clientIP, clientPort)
         
-        sockToServer.sendto("hello client", (clientIP, clientPort))     
+        sock.sendto("hello client", (clientIP, int(clientPort)))     
         
 if __name__ == "__main__":
     client = Client("10.84.1.116", 5555)
